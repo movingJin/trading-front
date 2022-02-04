@@ -161,7 +161,7 @@ export const PortfolioListCard: React.FC<arrayProps> = ({ rows }) => {
                           variant="subtitle2"
                           className={classes.successDark}
                         >
-                          주문금액 {e.price * e.quantity}
+                          주문금액 {(e.price * e.quantity).toFixed(2)}
                         </Typography>
                         <Typography
                           variant="subtitle2"

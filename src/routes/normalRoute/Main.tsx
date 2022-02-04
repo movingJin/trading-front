@@ -169,7 +169,6 @@ const Main = (): JSX.Element => {
       <MainBoxWrapper>
         <div className="mainTitle">
           <img src={bitcoin} alt="" className="photo" />
-          <div className="text">자고 있는 당신의 지갑을 채워줍니다.</div>
         </div>
       </MainBoxWrapper>
       <Container style={{ height: '70%' }}>
