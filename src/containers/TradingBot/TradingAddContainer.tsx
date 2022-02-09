@@ -217,7 +217,15 @@ const TradingBotAdd = ({
           ...values,
           [id]: value,
         });
-      } else {
+      }else if(id === 'bidQuantity'){
+        const copied = {...values};
+        copied.bidQuantity = Number(value);
+        copied.askQuantity = Number(value);
+        setValues({
+          ...copied,
+          [id]: Number(value),
+        });
+      }else {
         setValues({
           ...values,
           [id]: value,
@@ -404,8 +412,8 @@ const TradingBotAdd = ({
               <SmallTextField
                 id="askQuantity"
                 variant="outlined"
+                disabled
                 value={values.askQuantity}
-                onChange={handleChange}
               />
             </InputWrapper>
           </Box>
