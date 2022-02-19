@@ -41,22 +41,25 @@ export const postLivePriceData = (livePriceData: any) => {
   };
 };
 export interface ICoinState {
-  symbol: string;
-  tickType: string;
-  openPrice: string;
-  closePrice: string;
-  lowPrice: string;
-  highPrice: string;
-  value: string;
-  volume: string;
-  sellVolume: string;
-  buyVolume: string;
-  prevClosePrice: string;
-  chgRate: string;
-  chgAmt: string;
-  timeTag: string;
+  content: {
+    symbol: string;
+    tickType: string;
+    openPrice: string;
+    closePrice: string;
+    lowPrice: string;
+    highPrice: string;
+    value: string;
+    volume: string;
+    sellVolume: string;
+    buyVolume: string;
+    prevClosePrice: string;
+    chgRate: string;
+    chgAmt: string;
+    time: string;
+  }
   color?: any;
   changeCell?: string;
+  type: string;
 }
 interface ICoinInit {
   coinList: ICoinInit[];

@@ -13,20 +13,20 @@ const coinDataUtils = {
     const newData: any = [];
     data.forEach((coin: any) => {
       newData.push({
-        symbol: coin.symbol,
-        tickType: coin.tickType,
-        openPrice: coin.openPrice,
-        closePrice: coin.closePrice,
-        lowPrice: coin.lowPrice,
-        highPrice: coin.highPrice,
-        value: coin.value,
-        volume: coin.volume,
-        sellVolume: coin.sellVolume,
-        buyVolume: coin.buyVolume,
-        prevClosePrice: coin.prevClosePrice,
-        chgRate: coin.chgRate,
-        chgAmt: coin.chgAmt,
-        timeTag: coin.timeTag,
+        symbol: coin.content.symbol,
+        tickType: coin.content.tickType,
+        openPrice: coin.content.openPrice,
+        closePrice: coin.content.closePrice,
+        lowPrice: coin.content.lowPrice,
+        highPrice: coin.content.highPrice,
+        value: coin.content.value,
+        volume: coin.content.volume,
+        sellVolume: coin.content.sellVolume,
+        buyVolume: coin.content.buyVolume,
+        prevClosePrice: coin.content.prevClosePrice,
+        chgRate: coin.content.chgRate,
+        chgAmt: coin.content.chgAmt,
+        time: coin.content.time,
       });
     });
     return newData;
@@ -40,11 +40,11 @@ const coinDataUtils = {
     if (data.coinList.length) {
       newData = data.coinList.map((coin: any) => {
         return {
-          id: coin.symbol,
-          name: coin.symbol,
-          currentPrice: `${parseInt(coin.closePrice, 10).toLocaleString()}원`,
-          rateOfChange: coin.chgRate,
-          money: `${parseInt(coin.value, 10).toLocaleString()}원`,
+          id: coin.content.symbol,
+          name: coin.content.symbol,
+          currentPrice: `${parseInt(coin.content.closePrice, 10).toLocaleString()}원`,
+          rateOfChange: coin.content.chgRate,
+          money: `${parseInt(coin.content.value, 10).toLocaleString()}원`,
           color: coin.color,
           changeCell: coin.changeCell,
         };

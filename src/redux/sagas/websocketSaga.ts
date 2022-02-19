@@ -17,21 +17,29 @@ import {
 
 let wsConnection: any = null;
 const createSocket = () => {
-  const client = new WebSocket('ws://118.32.227.130:8086/ws/coins');
+  const client = new WebSocket('wss://pubwss.bithumb.com/pub/ws');
   client.binaryType = 'arraybuffer';
   wsConnection = client;
   return client;
 };
 const connectSocket = (socket: any, action: any, buffer: any) => {
   return eventChannel((emit) => {
-    socket.open = () => {
-      // console.log('connect websocket')
+    socket.onopen = () => {
+      socket.send(
+        JSON.stringify({
+          type: "ticker",
+          symbols: ['ADA_KRW','BCH_KRW','BTC_KRW','EOS_KRW','ETH_KRW','LINK_KRW','LTC_KRW','TRX_KRW','XLM_KRW','XRP_KRW'],
+          tickTypes:['30M']
+         })
+      );
     };
     socket.onmessage = (event: any) => {
       // const arr = new Uint8Array(evt.data);
       const data = JSON.parse(event.data);
+      if(data.type !== undefined && data.type === "ticker"){
       // console.log('socket onmessage: ', data);
-      emit(data);
+        emit(data);
+      }
     };
     socket.onerror = (error: any) => {
       console.dir(error);
@@ -55,13 +63,12 @@ export const createConnectSocketSaga = (type: any, dataMapper: any) => {
       action,
       buffers.expanding(500),
     );
-    try {
-      while (true) {
+    while (true) {
+      try {
         // 약 200ms동안 메세지 모으는중...
         const datas = yield flush(clientChannel);
         const state = yield select();
         const res = take(END_INIT);
-
         if (datas.length) {
           // 이 문구 없으면 메시지를 받았든 받지 않았든 200ms 마다 항상 dispatch 작업을 해서 혼란 야기할 수 도 있음
           // newCoinList: 기존값 data: 새로 들어온 값
@@ -78,27 +85,27 @@ export const createConnectSocketSaga = (type: any, dataMapper: any) => {
             };
           });
           datas.forEach((data: ICoinState) => {
-            const symbol: string = data.symbol as string;
+            const symbol: string = data.content.symbol as string;
             // if (state.coin.coinList[symbol]) {
             const targetIdx = newCoinList.findIndex(
-              (coin: any) => coin.symbol === symbol,
+              (coin: any) => coin.content.symbol === symbol,
             );
             if (targetIdx !== -1) {
               // 버퍼에 있는 데이터중 시간이 가장 최근인 데이터만 남김
               if (
-                newCoinList[targetIdx].closePrice !==
-                `${parseInt(data.closePrice, 10).toLocaleString()}원`
+                newCoinList[targetIdx].content.closePrice !==
+                `${parseInt(data.content.closePrice, 10).toLocaleString()}원`
               ) {
                 changeFlag = 'currentPrice';
               } else if (
-                newCoinList[targetIdx].money !==
-                `${parseInt(data.value, 10).toLocaleString()}원`
+                newCoinList[targetIdx].content.money !==
+                `${parseInt(data.content.value, 10).toLocaleString()}원`
               ) {
                 changeFlag = 'money';
               }
               if (
-                newCoinList[targetIdx].timeTag.split('T')[1] <
-                data.timeTag.split('T')[1]
+                newCoinList[targetIdx].content.time <
+                data.content.time
               ) {
                 newCoinList[targetIdx] = data;
                 newCoinList[targetIdx].color = 'true';
@@ -110,13 +117,13 @@ export const createConnectSocketSaga = (type: any, dataMapper: any) => {
             }
           });
           yield put({ type: SUCCESS, payload: newCoinList });
-          // yield put({ type: SUCCESS, payload: dataMapper(sortedData, state) });
         }
-        yield delay(500); // 500ms 동안 대기
+      } catch (e) {
+        yield put({ type: ERROR, payload: e });
       }
-    } catch (e) {
-      yield put({ type: ERROR, payload: e });
+      yield delay(500); // 500ms 동안 대기
     }
+
   };
 };
 

@@ -166,10 +166,10 @@ const TradingBotAdd = ({
       if (values.coinName && values.bidQuantity) {
         // 이게 반영 잘 되나?
         const targetCoin = cl.find((coin: ICoinState) => {
-          const [name] = coin.symbol.split('_');
+          const [name] = coin.content.symbol.split('_');
           return name === values.coinName;
         });
-        const price = values.bidQuantity * Number(targetCoin?.openPrice || '0');
+        const price = values.bidQuantity * Number(targetCoin?.content.openPrice || '0');
         const converted = price.toLocaleString('ko-KR', {
           maximumFractionDigits: 4,
         });
