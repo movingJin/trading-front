@@ -8,9 +8,9 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 
 export interface Data {
   name: string;
-  currentPrice: string;
+  currentPrice: number;
   rateOfChange: string;
-  money: string;
+  volume: number;
   id: string;
   color?: string;
   changeCell?: string;
@@ -81,7 +81,7 @@ const headCells: readonly HeadCell[] = [
     label: '변동률',
   },
   {
-    id: 'money',
+    id: 'volume',
     numeric: true,
     disablePadding: true,
     label: '거래금액',
@@ -142,15 +142,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 export default function EnhancedTable({ coindata }: any): JSX.Element {
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('rateOfChange');
+  const [order, setOrder] = React.useState<Order>('desc');
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('volume');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [rows, setRows] = React.useState([
     {
       name: '',
       currentPrice: '',
       rateOfChange: '',
-      money: '',
+      volume: '',
       id: '',
       color: '',
       changeCell: '',
@@ -273,7 +273,7 @@ export default function EnhancedTable({ coindata }: any): JSX.Element {
                         : { border: '0px solid ' }
                     }
                   >
-                    {row.currentPrice}
+                    {row.currentPrice.toLocaleString()}원
                   </div>
                 </TableCell>
                 <TableCell
@@ -289,7 +289,7 @@ export default function EnhancedTable({ coindata }: any): JSX.Element {
                 <TableCell align="left">
                   <div
                     style={
-                      row.color === 'true' && row.changeCell === 'money'
+                      row.color === 'true' && row.changeCell === 'volume'
                         ? {
                             borderBottom: '2px solid #f31616',
                             width: '7rem',
@@ -297,7 +297,7 @@ export default function EnhancedTable({ coindata }: any): JSX.Element {
                         : { border: '0px solid ' }
                     }
                   >
-                    {row.money}
+                    {row.volume.toLocaleString()}원
                   </div>
                 </TableCell>
               </TableRow>

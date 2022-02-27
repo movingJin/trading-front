@@ -19,7 +19,7 @@ interface Data {
   name: string;
   currentPrice: string;
   rateOfChange: string;
-  money: string;
+  volume: string;
   id: number;
 }
 interface stateProps {
@@ -42,9 +42,9 @@ function createData(
   name: string,
   currentPrice: string,
   rateOfChange: string,
-  money: string,
+  volume: string,
 ): Data {
-  return { id, name, currentPrice, rateOfChange, money };
+  return { id, name, currentPrice, rateOfChange, volume };
 }
 
 const rows: Data[] = [];

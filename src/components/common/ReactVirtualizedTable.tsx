@@ -182,7 +182,7 @@ interface Data {
   name: string;
   currentPrice: string;
   rateOfChange: string;
-  money: string;
+  volume: string;
   id: number;
 }
 interface arrayProps {
@@ -200,8 +200,8 @@ interface arrayProps {
 //   ['페이코인', '55,000,000', '+2.5%', '151.445'],
 // ];
 
-// function createData(id: number, name: string, currentPrice: string, rateOfChange: string, money: string): Data {
-//   return { id, name, currentPrice, rateOfChange, money };
+// function createData(id: number, name: string, currentPrice: string, rateOfChange: string, volume: string): Data {
+//   return { id, name, currentPrice, rateOfChange, volume };
 // }
 
 // const rows: Data[] = [];
@@ -242,7 +242,7 @@ export const ReactVirtualizedTable: React.FC<arrayProps> = ({
           {
             width: 150,
             label: '거래금액',
-            dataKey: 'money',
+            dataKey: 'volume',
             numeric: true,
           },
         ]}

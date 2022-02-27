@@ -2,9 +2,9 @@ import { LensTwoTone } from '@mui/icons-material';
 
 interface Data {
   name: string;
-  currentPrice: string;
+  currentPrice: number;
   rateOfChange: string;
-  money: string;
+  volume: number;
   id: string;
 }
 
@@ -42,9 +42,9 @@ const coinDataUtils = {
         return {
           id: coin.content.symbol,
           name: coin.content.symbol,
-          currentPrice: `${parseInt(coin.content.closePrice, 10).toLocaleString()}원`,
+          currentPrice: parseInt(coin.content.closePrice, 10),
           rateOfChange: coin.content.chgRate,
-          money: `${parseInt(coin.content.value, 10).toLocaleString()}원`,
+          volume: parseInt(coin.content.value, 10),
           color: coin.color,
           changeCell: coin.changeCell,
         };

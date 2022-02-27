@@ -73,10 +73,9 @@ export const createConnectSocketSaga = (type: any, dataMapper: any) => {
           // 이 문구 없으면 메시지를 받았든 받지 않았든 200ms 마다 항상 dispatch 작업을 해서 혼란 야기할 수 도 있음
           // newCoinList: 기존값 data: 새로 들어온 값
           let newCoinList: any = [...state.coin.coinList];
-          let changeFlag = '0';
           const flagMap: any = {
             currentPrice: `currentPrice`,
-            money: `money`,
+            volume: `volume`,
           };
           newCoinList = newCoinList.map((data: any) => {
             return {
@@ -91,25 +90,12 @@ export const createConnectSocketSaga = (type: any, dataMapper: any) => {
               (coin: any) => coin.content.symbol === symbol,
             );
             if (targetIdx !== -1) {
-              // 버퍼에 있는 데이터중 시간이 가장 최근인 데이터만 남김
-              if (
-                newCoinList[targetIdx].content.closePrice !==
-                `${parseInt(data.content.closePrice, 10).toLocaleString()}원`
-              ) {
-                changeFlag = 'currentPrice';
-              } else if (
-                newCoinList[targetIdx].content.money !==
-                `${parseInt(data.content.value, 10).toLocaleString()}원`
-              ) {
-                changeFlag = 'money';
-              }
               if (
                 newCoinList[targetIdx].content.time <
                 data.content.time
               ) {
                 newCoinList[targetIdx] = data;
                 newCoinList[targetIdx].color = 'true';
-                newCoinList[targetIdx].changeCell = flagMap[changeFlag];
               }
             } else {
               // 새로운 데이터면 그냥 넣음
