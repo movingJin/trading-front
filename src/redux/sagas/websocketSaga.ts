@@ -114,7 +114,7 @@ export const createConnectSocketSaga = (type: any, dataMapper: any) => {
 };
 
 const coinAPI = () => {
-  return axios.get('http://118.32.227.130:8086/coins');
+  return axios.get('https://gateway.trading-bot.movingjin.com');
 };
 function* fetchCoin(): any {
   try {

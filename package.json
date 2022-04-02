@@ -73,7 +73,7 @@
       }
     ]
   },
-  "proxy": "http://118.32.227.130:28000",
+  "proxy": "https://gateway.trading-bot.movingjin.com",
   "browserslist": {
     "production": [
       ">0.2%",
