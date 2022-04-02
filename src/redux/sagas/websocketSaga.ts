@@ -113,17 +113,6 @@ export const createConnectSocketSaga = (type: any, dataMapper: any) => {
   };
 };
 
-const coinAPI = () => {
-  return axios.get('https://gateway.trading-bot.movingjin.com');
-};
-function* fetchCoin(): any {
-  try {
-    const res = yield call(coinAPI);
-    yield put(fetchCoinActions.success(res.data));
-  } catch (e) {
-    yield put(fetchCoinActions.failure(e));
-  }
-}
 export function* wsEndSaga(): any {
   const clientChannel = yield call(
     connectSocket,
@@ -138,5 +127,4 @@ export function* wsSaga(): any {
 }
 export function* watchLivePricesSaga() {
   yield takeEvery(START_INIT, wsSaga);
-  yield takeEvery(FETCH_COIN_REQUEST, fetchCoin);
 }
