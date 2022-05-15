@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useLayoutEffect, useState, useMemo, useCallback } from 'react';
 import { Box, Button, TextFieldProps } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@redux/reducers';
 import { ICoinState } from '@redux/reducers/websocketReducer';
 import DialogActions from '@mui/material/DialogActions';
+import Snackbar from '@mui/material/Snackbar';
 
 const SmallTextField = ({ ...rest }: TextFieldProps) => {
   return <TextField size="small" {...rest} />;
@@ -152,13 +153,26 @@ const TradingBotAdd = ({
   const [localMsg, setLocalMsg] = useState('');
   const dispatch = useDispatch();
   const coinList = useSelector((state: RootState) => state.coin.coinList);
+  const botSelector = useSelector((state: RootState) => state.bot);
+  const [deleteResponse, setDeleteResponse] = useState('');
   const hasDefaultBotInfo = !!botInfo;
+  const [toast, setToast] = useState(false);
+  const handleToastOpen = () => setToast(true);
+  const handleToastClose = () => {
+    setToast(false);
+    setDeleteResponse('');
+  }
 
   useEffect(() => {
     if (botInfo) {
       setValues(botInfo);
     }
   }, []);
+
+  useLayoutEffect(() => {
+    setDeleteResponse(botSelector.response);
+    
+  }, [botSelector.response])
 
   // TODO: validation 추가
   const calculateCurrentPrice = useCallback(
@@ -206,7 +220,12 @@ const TradingBotAdd = ({
   };
 
   const handleDelete = useCallback(() => {
-    if (values.id) dispatch(deleteBotActions.request(values.id));
+    if(window.confirm("트레이딩봇 삭제후, 복구가 불가능합니다.\n정말로 삭제하시겠습니까?") === true){
+      if (values.id) {
+        const response = dispatch(deleteBotActions.request(values.id));
+        setToast(true);
+      }
+    }
   }, [values, dispatch]);
 
   const handleChange = useCallback(
@@ -275,6 +294,20 @@ const TradingBotAdd = ({
         {hasDefaultBotInfo ? (
           <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
         ) : null}
+        {deleteResponse === 'bot is running' && (
+          <>
+            <Snackbar
+              open={toast}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              autoHideDuration={3000}
+              onClose={handleToastClose}
+              message="실행중인 트레이딩봇은 삭제할 수 없습니다."
+            />
+          </>
+        )}
       </DialogTitle>
       <DialogContent
         sx={{

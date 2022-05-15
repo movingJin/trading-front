@@ -187,6 +187,8 @@ type BotAction =
 interface IBotState {
   bots: Bots;
   bot: Bot;
+  requestMethod: string,
+  response: string,
   // botInfo: BotInfo;
   isLoading: boolean;
 }
@@ -194,6 +196,8 @@ interface IBotState {
 const initialState: IBotState = {
   bots: [],
   bot: {} as Bot,
+  requestMethod: '',
+  response: '',
   // botInfo: {} as BotInfo,
   isLoading: false,
 };
@@ -210,6 +214,7 @@ export default function botReducer(
     case DELETE_BOT_REQUEST:
       return {
         ...state,
+        response: '',
         isLoading: true,
       };
     case GET_BOTS_SUCCESS: {
@@ -247,10 +252,15 @@ export default function botReducer(
     case UPDATE_BOT_SUCCESS:
     case UPDATE_BOT_FAILURE:
     case DELETE_BOT_SUCCESS:
+      return {
+        ...state,
+        response: action.payload
+      };
     case DELETE_BOT_FAILURE:
       return {
         ...state,
         isLoading: false,
+        response: action.payload
       };
     default:
       return state;

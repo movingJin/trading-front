@@ -130,8 +130,12 @@ function* deleteBot(action: GetBotAction) {
       throw new Error('DELETE bots request failed!');
     }
     yield put(deleteBotActions.success(res.data));
-  } catch (e) {
-    yield put(deleteBotActions.failure(e));
+  } catch (e: any) {
+    if(e.response.status === 406){
+      yield put(deleteBotActions.failure(e.response.data));
+    }else{
+      yield put(deleteBotActions.failure(e));
+    }
   }
 }
 
