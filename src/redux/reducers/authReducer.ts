@@ -330,7 +330,13 @@ export default function authReducer(
         isLoading: false,
       };
     case SIGNUP_FAILURE:
-      alert('가입 실패했습니다!');
+      if(action.payload.response.status === 500
+        && action.payload.response.data === "email is already exists"){
+        alert('이미 가입된 email 입니다.');
+      }else{
+        alert('가입에 실패했습니다!');
+      }
+      
       return {
         ...state,
         isLoading: false,
