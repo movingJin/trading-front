@@ -13,6 +13,7 @@ export default function SignUpContainer({
   open,
   handleClose,
 }: SignUpContainerProps): JSX.Element {
+  const [isPassword, setIsPassword] = React.useState(false);
   const [form, setValues] = useState({
     email: '',
     password: '',
@@ -45,7 +46,8 @@ export default function SignUpContainer({
       password !== '' &&
       passwordConfirm !== '' &&
       username !== '' &&
-      password === passwordConfirm
+      password === passwordConfirm &&
+      isPassword === true
     ) {
       setValues({
         ...form,
@@ -54,7 +56,7 @@ export default function SignUpContainer({
       const userInfo = { email, password, name: username };
       dispatch(signupActions.request(userInfo));
       handleClose();
-    } else if (password === passwordConfirm) {
+    } else if (isPassword && password === passwordConfirm) {
       setValues({
         ...form,
         localMsg: '정보를 다 채워주세요.',
@@ -64,23 +66,37 @@ export default function SignUpContainer({
 
   useEffect(() => {
     const { password, passwordConfirm } = form;
-    if (passwordConfirm === '') {
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
+    if(!password || passwordRegex.test(password)){
+      if (passwordConfirm === '') {
+        setValues({
+          ...form,
+          localMsg: '',
+        });
+      } else if (password !== passwordConfirm) {
+        setValues({
+          ...form,
+          localMsg: '비밀번호가 일치하지 않습니다.',
+        });
+      } else if (password === passwordConfirm) {
+        setValues({
+          ...form,
+          localMsg: '',
+        });
+      }
+       
+      setIsPassword(true);
+    }else{
       setValues({
         ...form,
-        localMsg: '',
+        localMsg: 'Password must be at least 8 characters and contain at least one letter and one number.',
       });
-    } else if (password !== passwordConfirm) {
-      setValues({
-        ...form,
-        localMsg: '비밀번호가 일치하지 않습니다.',
-      });
-    } else if (password === passwordConfirm) {
-      setValues({
-        ...form,
-        localMsg: '',
-      });
+      setIsPassword(false);
     }
-  }, [form.passwordConfirm]);
+
+
+
+  }, [form.password, form.passwordConfirm]);
 
   return (
     <SignUp
