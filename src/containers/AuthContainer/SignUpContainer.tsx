@@ -13,6 +13,7 @@ export default function SignUpContainer({
   open,
   handleClose,
 }: SignUpContainerProps): JSX.Element {
+  const [isEmail, setIsEmail] = React.useState(false);
   const [isPassword, setIsPassword] = React.useState(false);
   const [form, setValues] = useState({
     email: '',
@@ -43,11 +44,10 @@ export default function SignUpContainer({
     const { email, password, passwordConfirm, username } = form;
     if (
       email !== '' &&
-      password !== '' &&
-      passwordConfirm !== '' &&
       username !== '' &&
       password === passwordConfirm &&
-      isPassword === true
+      isPassword === true &&
+      isEmail === true
     ) {
       setValues({
         ...form,
@@ -59,14 +59,29 @@ export default function SignUpContainer({
     } else if (isPassword && password === passwordConfirm) {
       setValues({
         ...form,
-        localMsg: '정보를 다 채워주세요.',
+        localMsg: 'Please confirm sign-up information.',
       });
     }
   };
 
   useEffect(() => {
-    const { password, passwordConfirm } = form;
+    const { email, password, passwordConfirm } = form;
+    const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
+    if(!email || emailRegEx.test(email)){
+      setValues({
+        ...form,
+        localMsg: '',
+      });
+      setIsEmail(true);
+    }else{
+      setValues({
+        ...form,
+        localMsg: 'E-mail form is invalid.',
+      });
+      setIsEmail(false);
+    }
+
     if(!password || passwordRegex.test(password)){
       if (passwordConfirm === '') {
         setValues({
@@ -76,7 +91,7 @@ export default function SignUpContainer({
       } else if (password !== passwordConfirm) {
         setValues({
           ...form,
-          localMsg: '비밀번호가 일치하지 않습니다.',
+          localMsg: 'Password is not same.',
         });
       } else if (password === passwordConfirm) {
         setValues({
@@ -96,7 +111,7 @@ export default function SignUpContainer({
 
 
 
-  }, [form.password, form.passwordConfirm]);
+  }, [form.email, form.password, form.passwordConfirm]);
 
   return (
     <SignUp
