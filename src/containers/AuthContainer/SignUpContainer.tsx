@@ -73,6 +73,31 @@ export default function SignUpContainer({
         ...form,
         localMsg: '',
       });
+      if(!password || passwordRegex.test(password)){
+        if (passwordConfirm === '') {
+          setValues({
+            ...form,
+            localMsg: '',
+          });
+        } else if (password !== passwordConfirm) {
+          setValues({
+            ...form,
+            localMsg: 'Password is not same.',
+          });
+        } else if (password === passwordConfirm) {
+          setValues({
+            ...form,
+            localMsg: '',
+          });
+        }
+        setIsPassword(true);
+      }else{
+        setValues({
+          ...form,
+          localMsg: 'Password must be at least 8 characters and contain at least one letter and one number.',
+        });
+        setIsPassword(false);
+      }
       setIsEmail(true);
     }else{
       setValues({
@@ -81,36 +106,6 @@ export default function SignUpContainer({
       });
       setIsEmail(false);
     }
-
-    if(!password || passwordRegex.test(password)){
-      if (passwordConfirm === '') {
-        setValues({
-          ...form,
-          localMsg: '',
-        });
-      } else if (password !== passwordConfirm) {
-        setValues({
-          ...form,
-          localMsg: 'Password is not same.',
-        });
-      } else if (password === passwordConfirm) {
-        setValues({
-          ...form,
-          localMsg: '',
-        });
-      }
-       
-      setIsPassword(true);
-    }else{
-      setValues({
-        ...form,
-        localMsg: 'Password must be at least 8 characters and contain at least one letter and one number.',
-      });
-      setIsPassword(false);
-    }
-
-
-
   }, [form.email, form.password, form.passwordConfirm]);
 
   return (
