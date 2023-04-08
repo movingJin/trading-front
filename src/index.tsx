@@ -11,6 +11,7 @@ import preLogin from './utils/preLogin';
 declare global {
   interface Window {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+    google?: any;
   }
 }
 

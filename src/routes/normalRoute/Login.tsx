@@ -20,6 +20,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useHistory } from 'react-router';
 import { RootState } from '@redux/reducers';
 import { createTheme, ThemeProvider } from '@mui/material/styles/';
+import { Route } from 'react-router-dom';
+import OauthLogin from '../../components/Auth/OauthLogin';
+import { getUserInfo } from '../../redux/sagas/getUserInfo';
 
 const loginTitleFont = createTheme({
   typography: {
@@ -69,6 +72,7 @@ export default function Login(): JSX.Element {
     email: '',
     password: '',
   });
+  const [isLogin, setIsLogin] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
@@ -99,6 +103,14 @@ export default function Login(): JSX.Element {
       history.push('/main/dashboard');
     }
   }, [isAuthenticated]);
+
+  // useEffect(() => {
+  //   const initLogin = async () => {
+  //     const name = await getUserInfo();
+  //     setIsLogin(!!name);
+  //   };
+  //   initLogin();
+  // }, []);
 
   if (isLoading) {
     return (
@@ -213,6 +225,13 @@ export default function Login(): JSX.Element {
                       Login
                     </Button>
                   </Box>
+                </CardContent>
+                <CardContent>
+                  <OauthLogin isLogin={isLogin} setIsLogin={setIsLogin} />
+                  {/* <Route
+                    path="/"
+                    element={}
+                  /> */}
                 </CardContent>
                 <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
                   <Button size="large" onClick={handleClickSignUp}>

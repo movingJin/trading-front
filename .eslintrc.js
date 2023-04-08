@@ -19,7 +19,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'react/jsx-props-no-spreading': 'off',
     'no-empty-function': 'off',
-    '@typescript-eslint/no-empty-function': ['error'],
+    '@typescript-eslint/no-empty-function': 'off',
     'react/require-default-props': 'off',
     'react/static-property-placement': ['error', 'static public field'],
     '@typescript-eslint/no-non-null-assertion': 'off',
