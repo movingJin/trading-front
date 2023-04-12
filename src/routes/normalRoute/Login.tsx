@@ -227,7 +227,7 @@ export default function Login(): JSX.Element {
                   </Box>
                 </CardContent>
                 <CardContent>
-                  <OauthLogin isLogin={isLogin} setIsLogin={setIsLogin} />
+                  <OauthLogin isLogin={isAuthenticated} />
                   {/* <Route
                     path="/"
                     element={}

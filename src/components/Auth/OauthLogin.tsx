@@ -1,28 +1,41 @@
 import React from 'react'
-import { useEffect } from 'react';
+import { loginActions } from '@redux/reducers/authReducer';
+import { useDispatch } from 'react-redux';
+
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import GoogleLogin from './GoogleLogin';
 import Nav from './Nav';
 import { postLoginToken } from '../../redux/sagas/postLoginToken';
 
-export default function OauthLogin( {isLogin, setIsLogin}: {isLogin: boolean, setIsLogin:any} ) {
+export default function OauthLogin( {isLogin}: {isLogin: boolean} ) {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const [userInfo, setUserInfo] = useState({
+    email: '',
+    password: '',
+  });
+
+  useEffect(() => {
+    if(userInfo.email === null || userInfo.email === '') return; 
+    dispatch(loginActions.request(userInfo));
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (isLogin){
+      history.push('/main/dashboard');
+    }
+  }, [isLogin]);
 
   // https://stackoverflow.com/questions/49819183/react-what-is-the-best-way-to-handle-login-and-authentication
   const onGoogleSignIn = async (res: any) => {
     const { credential } = res;
-    const result = await postLoginToken(credential);
-    setIsLogin(result);
+    const userInfo = await postLoginToken(credential);
+    setUserInfo(userInfo);
   };
-
-  useEffect(() => {
-    if (!isLogin) return;
-    history.push('/mypage');
-  }, [isLogin]);
 
   return (
     <div>
-      <Nav />
       <GoogleLogin onGoogleSignIn={onGoogleSignIn} text="로그인" />
     </div>
   );
