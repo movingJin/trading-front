@@ -30,8 +30,8 @@ export default function OauthLogin( {isLogin}: {isLogin: boolean} ) {
   // https://stackoverflow.com/questions/49819183/react-what-is-the-best-way-to-handle-login-and-authentication
   const onGoogleSignIn = async (res: any) => {
     const { credential } = res;
-    const userInfo = await postLoginToken(credential);
-    setUserInfo(userInfo);
+    const user = await postLoginToken(credential);
+    setUserInfo(user);
   };
 
   return (
