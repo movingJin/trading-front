@@ -63,12 +63,11 @@ export const createConnectSocketSaga = (type: any, dataMapper: any) => {
       action,
       buffers.expanding(500),
     );
-    while (true) {
+    while (client.readyState !== 3) {
       try {
         // 약 200ms동안 메세지 모으는중...
         const datas = yield flush(clientChannel);
         const state = yield select();
-        const res = take(END_INIT);
         if (datas.length) {
           // 이 문구 없으면 메시지를 받았든 받지 않았든 200ms 마다 항상 dispatch 작업을 해서 혼란 야기할 수 도 있음
           // newCoinList: 기존값 data: 새로 들어온 값
@@ -114,13 +113,10 @@ export const createConnectSocketSaga = (type: any, dataMapper: any) => {
 };
 
 export function* wsEndSaga(): any {
-  const clientChannel = yield call(
-    connectSocket,
-    wsConnection,
-    '',
-    buffers.expanding(500),
-  );
-  clientChannel.unsubscribe();
+  while(true){
+    yield take(END_INIT);
+    wsConnection.close();
+  }
 }
 export function* wsSaga(): any {
   yield connectSocketSaga({ payload: 'coinList' });

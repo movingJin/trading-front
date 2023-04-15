@@ -4,7 +4,7 @@ import axios from 'axios';
 import authSaga from './authSaga';
 import coinSaga from './coinSaga';
 import portfolioSaga from './portfolioSaga';
-import { watchLivePricesSaga } from './websocketSaga';
+import { watchLivePricesSaga, wsEndSaga } from './websocketSaga';
 import botSaga from './botSaga';
 
 // dotenv.config();
@@ -18,5 +18,6 @@ export default function* rootSaga() {
     fork(botSaga),
     fork(portfolioSaga),
     fork(watchLivePricesSaga),
+    fork(wsEndSaga)
   ]);
 }

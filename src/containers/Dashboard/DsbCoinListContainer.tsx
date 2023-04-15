@@ -13,11 +13,12 @@ const DsbCoinList = (): JSX.Element => {
   const coinValue = useSelector((state: RootState) => state.coin);
   const [coinData, setCoinData] = useState(coinValue);
   useEffect(() => {
+    coinValue.coinList = [];
     dispatch(fetchCoinActions.request());
     dispatch(startInit());
   }, []);
   useEffect(() => {
-    if (coinValue?.coinList.length) {
+    if (coinValue?.coinList?.length) {
       setCoinData(coinDataUtils.convertData(coinValue));
     }
   }, [coinValue?.coinList]);
