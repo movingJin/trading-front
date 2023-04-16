@@ -29,7 +29,7 @@ const connectSocket = (socket: any, action: any, buffer: any) => {
         JSON.stringify({
           type: "ticker",
           symbols: ['ADA_KRW','BCH_KRW','BTC_KRW','EOS_KRW','ETH_KRW','LINK_KRW','LTC_KRW','TRX_KRW','XLM_KRW','XRP_KRW'],
-          tickTypes:['30M']
+          tickTypes:['24H']
          })
       );
     };
