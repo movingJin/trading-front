@@ -324,7 +324,7 @@ export default function authReducer(
         // errorMsg: action.payload,
       };
     case SIGNUP_SUCCESS:
-      if (action.payload !== 'update') alert('가입 되었습니다!');
+      if (action.payload !== 'update') alert('회원가입이 정상적으로 처리되었습니다!');
       return {
         ...state,
         isLoading: false,
