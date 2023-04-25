@@ -15,13 +15,15 @@ export default function OauthLogin( {isLogin}: {isLogin: boolean} ) {
   
   const history = useHistory();
   const dispatch = useDispatch();
-  const [userInfo, setUserInfo] = useState({
+  const [loginRequstInfo, setLoginRequstInfo] = useState({
+    status: '',
     email: '',
     name: '',
     password: '',
   });
   const [isModalOpen, setModalOpen] = useState(false);
   const [accountCreated, setAccountCreated] = useState(false);
+
   const openModal = () => {
     setModalOpen(true);
   }
@@ -36,7 +38,7 @@ export default function OauthLogin( {isLogin}: {isLogin: boolean} ) {
 
   const submitCreateOauthUser = async () => {
     closeModal();
-    const rc = await createOauthUser(userInfo);
+    const rc = await createOauthUser(loginRequstInfo);
     if(rc === 201){
       setAccountCreated(true);
       handleToastOpen();
@@ -45,9 +47,14 @@ export default function OauthLogin( {isLogin}: {isLogin: boolean} ) {
 
 
   useEffect(() => {
-    if((!userInfo.email || userInfo.email === 'null') ||(!userInfo.password || userInfo.password === 'null')) return; 
-    dispatch(loginActions.request(userInfo));
-  }, [userInfo]);
+    if(loginRequstInfo.status === "SUCCESS"){
+      const userInfo = (({ email, name, password }) => ({ email, name, password }))(loginRequstInfo);
+      dispatch(loginActions.request(userInfo));
+    }else if(loginRequstInfo.status === "NO_USER"){
+      setModalOpen(true);
+    }
+    
+  }, [loginRequstInfo]);
 
   useEffect(() => {
     if (isLogin){
@@ -63,17 +70,14 @@ export default function OauthLogin( {isLogin}: {isLogin: boolean} ) {
   const onGoogleSignIn = async (res: any) => {
     const { credential } = res;
     const {"rc": status, "userInfo": user} = await postLoginToken(credential);
-    setUserInfo(user);
-    if(status === 404){
-      setModalOpen(true);
-    }
+    setLoginRequstInfo(user);
   };
 
   return (
     <div>
       <GoogleLogin onGoogleSignIn={onGoogleSignIn} text="로그인" />
       <Modal open={isModalOpen} close={closeModal} header="회원가입" submit={submitCreateOauthUser}>
-        {userInfo.email} 로 가입하겠습니까?? 
+        {loginRequstInfo.email} 로 가입하겠습니까?? 
       </Modal>
             <Snackbar
               open={toast}
